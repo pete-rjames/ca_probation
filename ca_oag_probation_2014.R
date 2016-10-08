@@ -17,7 +17,7 @@ df_2014 <- df %>%
   filter(report == "Caseload" & year == 2014) %>%
   spread(offense, value) %>%
   clean_names() %>%
-  mutate(state_percent = total/sum(total)) %>%
+  mutate(state_percent = 100*(total/sum(total))) %>%
   select(county, felony, misdemeanor, total, state_percent)
 
 write.csv(df_2014, file = "ca_oag_probation_caseload_2014.csv", row.names = FALSE)
