@@ -1,11 +1,11 @@
-# ca_oag_probation_2014.R
-# SUMMARISE 2014 PROBATION CASELOAD DATA BY COUNTY AND CREATE <AP
+# SUMMARISE 2014 PROBATION CASELOAD DATA BY COUNTY AND CREATE MAP
 
 # Library
 
 library(dplyr)
 library(tidyr)
 library(janitor)
+library(ggplot2)
 
 # Step 1: read in dataframe 
 
@@ -26,7 +26,7 @@ df_2014 <- df %>%
   mutate(state_percent = round((100*total/sum(total)),1)) %>%
   select(county, felony, misdemeanor, total, state_percent)
 
-#write.csv(df_2014, file = "ca_oag_probation_2014.csv", row.names = FALSE)
+write.csv(df_2014, file = "ca_oag_probation_2014.csv", row.names = FALSE)
 
 # Step 3: create data frame for map
 
@@ -59,3 +59,4 @@ county_choropleth(df_2014_map,
                   title = "County percentage share of state probation population, 2014",
                   state_zoom = "california")
 
+ggsave(filename="ca_probation_map.png")
