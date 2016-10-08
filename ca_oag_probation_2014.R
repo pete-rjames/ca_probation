@@ -14,19 +14,13 @@ df <- read.csv("https://raw.githubusercontent.com/pete-rjames/ca_probation/maste
 # Step 2: subset data frame
 
 df_2014 <- df %>%
-  filter(report == "Caseload" & offense == "Total" & year == 2014) %>%
-  mutate(percent = round((100*value/sum(value)),1))  %>%
-  rename(caseload = value) %>%
-  select(county, caseload, percent)
-
-df_2014 <- df %>%
   filter(report == "Caseload" & year == 2014) %>%
   spread(offense, value) %>%
   clean_names() %>%
-  mutate(state_percent = round((100*total/sum(total)),1)) %>%
+  mutate(state_percent = total/sum(total)) %>%
   select(county, felony, misdemeanor, total, state_percent)
 
-write.csv(df_2014, file = "ca_oag_probation_2014.csv", row.names = FALSE)
+write.csv(df_2014, file = "ca_oag_probation_caseload_2014.csv", row.names = FALSE)
 
 # Step 3: create data frame for map
 
@@ -34,6 +28,7 @@ write.csv(df_2014, file = "ca_oag_probation_2014.csv", row.names = FALSE)
 
 df_2014_map_format <- df_2014 %>%
   mutate(county = tolower(county)) %>%
+  mutate(state_percent = round(state_percent,1)) %>%
   rename(county.name = county, value = state_percent) %>%
   select(county.name, value)
 
